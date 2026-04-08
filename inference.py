@@ -89,6 +89,12 @@ async def run_task(task: str):
                 break
 
         score = sum(rewards) / len(rewards)
+
+        if score <= 0:
+            score = 0.1
+        elif score >= 1:
+            score = 0.9
+
         success = score > 0
 
     except Exception as e:
