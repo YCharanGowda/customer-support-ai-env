@@ -17,4 +17,4 @@ dependencies = [
 ]
 
 [project.scripts]
-server = "round_1.server.app:app"
+server = "server.app:app"
