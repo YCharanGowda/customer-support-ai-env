@@ -6,10 +6,19 @@ This script runs the environment and logs steps in the required format:
     [STEP]  step=<n> action=<action_str> reward=<0.00> done=<true|false> error=<msg|null>
     [END]   success=<true|false> steps=<n> score=<score> rewards=<r1,r2,...,rn>
 """
+
 import asyncio
+import os
 from typing import List, Optional
 
+from openai import OpenAI
 from round_1.server.environment import Round1Environment, Action
+
+# ===== LLM CLIENT =====
+client = OpenAI(
+    base_url=os.environ["API_BASE_URL"],
+    api_key=os.environ["API_KEY"]
+)
 
 TASKS = ["easy", "medium", "hard"]
 MAX_STEPS = 3
@@ -17,7 +26,7 @@ MAX_STEPS = 3
 
 # ===== LOGGING =====
 def log_start(task: str):
-    print(f"[START] task={task} env=round_1 model=baseline", flush=True)
+    print(f"[START] task={task} env=round_1 model=llm-agent", flush=True)
 
 
 def log_step(step: int, action: str, reward: float, done: bool, error: Optional[str]):
@@ -31,12 +40,27 @@ def log_end(success: bool, steps: int, score: float, rewards: List[float]):
     print(f"[END] success={str(success).lower()} steps={steps} score={score:.2f} rewards={rewards_str}", flush=True)
 
 
-# ===== SIMPLE RULE-BASED AGENT =====
+# ===== LLM AGENT =====
 def generate_action(obs):
+    try:
+        response = client.chat.completions.create(
+            model=os.environ.get("MODEL_NAME"),
+            messages=[
+                {"role": "system", "content": "You are a helpful customer support assistant."},
+                {"role": "user", "content": str(obs)}
+            ]
+        )
+
+        reply = response.choices[0].message.content
+
+    except Exception as e:
+        # fallback if API fails
+        reply = "We are sorry your issue will be resolved soon"
+
     return Action(
         category="billing",
         priority="high",
-        response="We are sorry your issue will be resolved soon"
+        response=reply
     )
 
 
