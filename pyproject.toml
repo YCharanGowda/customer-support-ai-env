@@ -4,11 +4,17 @@
 # This source code is licensed under the BSD-style license found in the
 # LICENSE file in the root directory of this source tree.
 
+[project]
+name = "customer-support-ai-env"
+version = "0.1.0"
+requires-python = ">=3.10"
+
 dependencies = [
-    "openenv-core[core]>=0.2.2",
-    "pydantic>=2.0",
-    "fastapi>=0.110.0",
-    "uvicorn[standard]>=0.29.0",
-    "openai>=1.0.0",
-    "requests>=2.31.0"
+    "openenv-core>=0.2.0",
+    "fastapi",
+    "uvicorn",
+    "pydantic"
 ]
+
+[project.scripts]
+server = "round_1.server.app:app"
