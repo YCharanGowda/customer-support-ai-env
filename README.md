@@ -1,3 +1,13 @@
+---
+title: Customer Support AI Environment
+emoji: 🤖
+colorFrom: blue
+colorTo: green
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # Round 1 Environment (OpenEnv)
 
 This project implements a custom **OpenEnv environment** for Round 1 of the hackathon.
