@@ -9,7 +9,7 @@ from pydantic import BaseModel
 import os
 from openai import OpenAI
 
-from server.environment import Round1Environment, Action
+from round_1.server.environment import Round1Environment, Action
 
 app = FastAPI()
 env = Round1Environment()
